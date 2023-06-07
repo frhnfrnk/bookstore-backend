@@ -13,9 +13,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-pjc@-ht$kv$-b0jlvtm67u4+_w5wptj79sl@!@^m-va9$#ooj#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'farhanfranaka.pythonanywhere.com']
+ALLOWED_HOSTS = ['localhost', 'farhanfranaka.pythonanywhere.com', '127.0.0.1']
 
 # Application definition
 
@@ -76,7 +76,7 @@ ROOT_URLCONF = 'grbbe.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join( BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
