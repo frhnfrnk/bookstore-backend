@@ -34,15 +34,15 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "https://grbfe.vercel.app",
-    "https://www.frhnbook.store/",
-    "https://frhnbook.store/"
+    "https://www.frhnbook.store",
+    "https://frhnbook.store"
     
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://grbfe.vercel.app",
     'https://www.frhnbook.store',
-    "https://frhnbook.store/"
+    "https://frhnbook.store"
 ]
 
 INSTALLED_APPS = [
