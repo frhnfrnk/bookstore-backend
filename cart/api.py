@@ -7,9 +7,8 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 
 @api_view(['GET'])
 def cart_list(request):
-    staff_id = request.data['staff_id']
     with connection.cursor() as cursor:
-        cursor.execute('SELECT * FROM Cart WHERE staff_id = %s', [staff_id])
+        cursor.execute('SELECT * FROM Cart')
         rows = cursor.fetchall()
 
     carts = []

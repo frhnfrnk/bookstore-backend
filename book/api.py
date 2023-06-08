@@ -127,7 +127,7 @@ def book_list_create(request):
 
         with connection.cursor() as cursor:
             cursor.execute("SELECT author_id FROM Author WHERE author_name = %s", [author])
-            author_id = cursor.fetchone()[0]
+            author_id = cursor.fetchone()
 
         if author_id is None:
             with connection.cursor() as cursor:
@@ -158,7 +158,7 @@ def book_list_create(request):
         
         with connection.cursor() as cursor:
             cursor.execute("SELECT category_id FROM Category WHERE category_name = %s", [category])
-            category_id = cursor.fetchone()[0]
+            category_id = cursor.fetchone()
 
         if category_id is None:
             with connection.cursor() as cursor:
