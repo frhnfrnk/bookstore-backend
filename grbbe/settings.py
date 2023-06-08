@@ -33,12 +33,12 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "https://grbfe.vercel.app/",
+    "https://grbfe.vercel.app",
     
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://grbfe.vercel.app/",
+    "https://grbfe.vercel.app",
 ]
 
 INSTALLED_APPS = [
