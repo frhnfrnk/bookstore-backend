@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-pjc@-ht$kv$-b0jlvtm67u4+_w5wptj79sl@!@^m-va9$#ooj#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://grbfe.vercel.app/']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -33,11 +33,12 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    "https://grbfe.vercel.app/",
+    
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
+    "https://grbfe.vercel.app/",
 ]
 
 INSTALLED_APPS = [
