@@ -142,9 +142,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/' 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static') 
-STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'grbbe', 'static‌'), ) 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# The URL to use when referring to static files (where they will be served from)
+STATIC_URL = '/static/'
 try: 
   from local_settings import * 
 except: 
