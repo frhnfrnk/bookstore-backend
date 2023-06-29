@@ -104,88 +104,102 @@ def book_list_create(request):
         category = request.data.get('category')
 
         with connection.cursor() as cursor:
-            cursor.execute(
-                """
-                INSERT INTO Book (title, description, publication_year, num_pages, price, condition_value, isbn13, image, language_id, publisher_id)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                RETURNING book_id
-                """,
-                (
-                    book_data['title'],
-                    book_data['description'],
-                    book_data['publication_year'],
-                    book_data['num_pages'],
-                    book_data['price'],
-                    book_data['condition_value'],
-                    book_data['isbn13'],
-                    book_data['image'],
-                    book_data['language'],
-                    book_data['publisher'],
-                ),
-            )
-            book_id = cursor.fetchone()[0]
+            cursor.execute("BEGIN;")
 
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT author_id FROM Author WHERE author_name = %s", [author])
-            author_id = cursor.fetchone()
-
-        if author_id is None:
+        try:
             with connection.cursor() as cursor:
                 cursor.execute(
                     """
-                    INSERT INTO Author (author_name)
-                    VALUES (%s)
-                    RETURNING author_id
+                    INSERT INTO Book (title, description, publication_year, num_pages, price, condition_value, isbn13, image, language_id, publisher_id)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    RETURNING book_id
                     """,
                     (
-                        author,
+                        book_data['title'],
+                        book_data['description'],
+                        book_data['publication_year'],
+                        book_data['num_pages'],
+                        book_data['price'],
+                        book_data['condition_value'],
+                        book_data['isbn13'],
+                        book_data['image'],
+                        book_data['language'],
+                        book_data['publisher'],
                     ),
                 )
-                author_id = cursor.fetchone()[0]
+                book_id = cursor.fetchone()[0]
 
-        else:
             with connection.cursor() as cursor:
-                cursor.execute(
-                    """
-                    INSERT INTO book_author (book_id, author_id)
-                    VALUES (%s, %s)
-                    """,
-                    (
-                        book_id,
-                        author_id,
-                    ),
-                )
-        
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT category_id FROM Category WHERE category_name = %s", [category])
-            category_id = cursor.fetchone()
+                cursor.execute("SELECT author_id FROM Author WHERE author_name = %s", [author])
+                author_id = cursor.fetchone()
 
-        if category_id is None:
+            if author_id is None:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        INSERT INTO Author (author_name)
+                        VALUES (%s)
+                        RETURNING author_id
+                        """,
+                        (
+                            author,
+                        ),
+                    )
+                    author_id = cursor.fetchone()[0]
+            else:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        INSERT INTO book_author (book_id, author_id)
+                        VALUES (%s, %s)
+                        """,
+                        (
+                            book_id,
+                            author_id,
+                        ),
+                    )
+
             with connection.cursor() as cursor:
-                cursor.execute(
-                    """
-                    INSERT INTO Category (category_name)
-                    VALUES (%s)
-                    RETURNING category_id
-                    """,
-                    (
-                        category,
-                    ),
-                )
-                category_id = cursor.fetchone()[0]
-            
-        else:
+                cursor.execute("SELECT category_id FROM Category WHERE category_name = %s", [category])
+                category_id = cursor.fetchone()
+
+            if category_id is None:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        INSERT INTO Category (category_name)
+                        VALUES (%s)
+                        RETURNING category_id
+                        """,
+                        (
+                            category,
+                        ),
+                    )
+                    category_id = cursor.fetchone()[0]
+            else:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        INSERT INTO book_category (book_id, category_id)
+                        VALUES (%s, %s)
+                        """,
+                        (
+                            book_id,
+                            category_id,
+                        ),
+                    )
+
+            # Commit transaksi jika semua pernyataan berhasil dieksekusi
             with connection.cursor() as cursor:
-                cursor.execute(
-                    """
-                    INSERT INTO book_category (book_id, category_id)
-                    VALUES (%s, %s)
-                    """,
-                    (
-                        book_id,
-                        category_id,
-                    ),
-                )
+                cursor.execute("COMMIT;")
+
+        except Exception as e:
+            # Rollback transaksi jika terjadi kesalahan
+            with connection.cursor() as cursor:
+                cursor.execute("ROLLBACK;")
+
+            print("Error occurred. Transaction rolled back:", str(e))
+
 
         response_data = {
             'book_id': book_id,

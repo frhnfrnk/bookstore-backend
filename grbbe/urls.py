@@ -2,8 +2,11 @@ from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
 
+from . import api
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # path('table/', api.table, name='table'),
     path('api/book/', include('book.urls')),
     path('api/cart/', include('cart.urls')),
     path('api/customer/', include('customer.urls')),
